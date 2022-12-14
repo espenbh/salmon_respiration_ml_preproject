@@ -33,9 +33,8 @@ def bb_intersection_over_union(boxA, boxB):
     boxA_area = (boxA[2] - boxA[0]) * (boxA[3] - boxA[1])
     boxB_area = (boxB[2] - boxB[0]) * (boxB[3] - boxB[1])
 
-    # compute the intersection over union by taking the intersection
-    # area and dividing it by the sum of prediction + ground-truth
-    # areas - the interesection area
+    # compute the intersection over union by taking the 
+    # intersection area and dividing it by the sum of the areas of the two bounding boxes, minus the intersection area
     iou = intersection_area / float(boxA_area + boxB_area - intersection_area)
     assert iou >= 0.0
     assert iou <= 1.0
@@ -96,41 +95,3 @@ def update_trackers(active_tracker, log_tracker, frame, targets, box_count, NN_i
         active_tracker = [active_tracker[i] for i in keep_idx]
 
     return active_tracker, log_tracker, box_count
-
-    
-# def process_output(images, targets, active_tracker, log_tracker, frame, iou_threshold = 0.1):
-#     toPilImg = T.ToPILImage()
-    
-#     for idx, img in enumerate(images):
-#         img = torch.as_tensor(img.detach().cpu().numpy())
-#         img = np.array(toPilImg(img).convert('RGB'))
-#         if 'scores' in targets[idx]:
-#             nms = torchvision.ops.nms(targets[idx]['boxes'], targets[idx]['scores'], iou_threshold = iou_threshold)
-#             nms = nms.detach().numpy()
-#         else:
-#             nms = list(range(len(targets[idx]['boxes'])))
-#         boxes = targets[idx]['boxes'].detach().cpu().numpy()
-#         for i in nms:
-#             cv2.rectangle(img, 
-#                 tuple(boxes[i][:2].astype(int)),
-#                 tuple(boxes[i][2:].astype(int)), 
-#                 (255,0,0), 5)
-#             hit = 0
-#             for ab in range(len(active_tracker)):
-#                 print(bb_intersection_over_union(active_tracker[ab]['instance'], boxes[i]))
-#                 if bb_intersection_over_union(active_tracker[ab]['instance'], boxes[i]) > 0.8:
-#                     active_tracker[ab]['instance'] = boxes[i]
-#                     active_tracker[ab]['dist'].append(math.dist(targets[idx]['keypoints'][i][0], targets[idx]['keypoints'][i][1]))
-#                     hit = 1
-#             if hit == 0:
-#                 new_inst = {'instance': boxes[i], 'dist': [math.dist(targets[idx]['keypoints'][i][0], targets[idx]['keypoints'][i][1])], 'startframe': frame}
-#                 active_tracker.append(new_inst)
-#             for keypoint in range(3):
-#                 color = (255,255,255)
-#                 if keypoint == 0: color = (255,0,0) # ljaw
-#                 if keypoint == 1: color = (0,255,0) # ujaw
-#                 if keypoint == 2: color = (0,0,255) # eye
-#                 cv2.circle(img, 
-#                            (int(targets[idx]['keypoints'][i][keypoint][0]), int(targets[idx]['keypoints'][i][keypoint][1])), 5,
-#                            color, 5)
-#     return img, active_tracker, log_tracker

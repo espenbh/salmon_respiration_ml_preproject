@@ -1,30 +1,14 @@
 import cv2
-vidcap = cv2.VideoCapture('C:\\Users\\espebh\\Documents\\project\\data\\videos\\original videos\\2ttank9.avi')
+start_frame = 5000
+num_frames_in_video = 1000
+vidcap = cv2.VideoCapture('C:\\Users\\espebh\\Documents\\project\\data\\videos\\4t tank 9.MP4')
+vidcap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
 success, image = vidcap.read()
-count = 0
 while success:
-    cv2.imwrite("C:\\Users\\espebh\\Documents\\project\\data\\videos\\split video\\frame%d.jpg" % count, image)     # save frame as JPEG file      
+    if vidcap.get(cv2.CAP_PROP_POS_FRAMES) % 100 == 0:
+        print(vidcap.get(cv2.CAP_PROP_POS_FRAMES)) 
+    cv2.imwrite("C:\\Users\\espebh\\Documents\\project\\data\\videos\\split video\\frame%d.jpg" % vidcap.get(cv2.CAP_PROP_POS_FRAMES), image)     # save frame as JPEG file      
     success,image = vidcap.read()
-    count += 1
-    if not count % 100:
-        print('Frame nr: ', count)
-
-
+    if vidcap.get(cv2.CAP_PROP_POS_FRAMES) > start_frame + num_frames_in_video:
+        break
 vidcap.release()  
-
-# import numpy as np  
-# import cv2  
-  
-# cap = cv2.VideoCapture('C:\\Users\\espebh\\Documents\\project\\data\\videos\\original videos\\4t tank 9.mp4')  
-  
-# while(cap.isOpened()):  
-#     ret, frame = cap.read()  
-# #it will open the camera in the grayscale mode  
-#     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  
-  
-#     cv2.imshow('frame',gray)  
-#     if cv2.waitKey(1) & 0xFF == ord('q'):  
-#         break  
-  
-# cap.release()  
-# cv2.destroyAllWindows()  

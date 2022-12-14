@@ -40,8 +40,10 @@ def draw_label_on_single_img(img, target, NN_iou_threshold = 0.1):
                         color, 5)
     return img
 
-    # Function to draw frames 
-
+# Draw bounding boxes and keypoints on image.
+# Input is image: tensor([[[]]])
+# Input is list of active trackers, i.e. [{last_bbox: [4], last_keypoints = [3], dists[n], first_frame: c, last_frame: c, box_number: c}, {...}, ...]
+# Output is an annotated image
 def draw_active_tracker(img, active_trackers):
     toPilImg = T.ToPILImage()
     img = torch.as_tensor(img.detach().cpu().numpy())
@@ -59,8 +61,5 @@ def draw_active_tracker(img, active_trackers):
             cv2.circle(img, 
                         (int(instance['last_keypoints'][keypoint][0]), int(instance['last_keypoints'][keypoint][1])), 5,
                         color, 5)
-        #frequency = -1
-        #if len(instance['dists']) > 3:
-        #    frequency = calculate_breathing_frequency(instance['dists'])
         cv2.putText(img, str(['Box nr. ', str(instance['box_count'])]), tuple(instance['last_bbox'][:2].astype(int)), cv2.FONT_HERSHEY_SIMPLEX, 1, (209, 80, 0, 255), 3) 
     return img
