@@ -4,5 +4,8 @@
 - Labelme was used for manual annotation: https://github.com/wkentaro/labelme/releases
 
 
-https://user-images.githubusercontent.com/59967194/224693714-be95cd88-950d-41cd-94f5-9c23d5141523.mp4
+
+
+
+https://user-images.githubusercontent.com/59967194/224696039-ce58251a-79be-413b-afc5-e1e541552a93.mp4
 
